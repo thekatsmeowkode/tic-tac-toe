@@ -25,3 +25,8 @@ button {
     width: 100px;
     height: 100px;
 }
+
+.announcement {
+    height: 300px;
+    width: 500px;
+}

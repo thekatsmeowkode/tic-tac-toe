@@ -6,37 +6,38 @@
     }
 }());
 
-//factory
+let gameSetup = (function() {
+    const buttons = document.querySelectorAll('button')
+    buttons.forEach(button => {button.addEventListener('click', function handleClick(event) {
+        console.log(event.target.id)
+        gamePlay.checkSelection(event)
+    })})
+    }());
+
 function createUser(sigil, name) {
-    return {
-        sigil:sigil,
-        name:name
-    }
-}
+        return {sigil, name}}    
 
 let player1 = createUser('x', 'Kat')
 let player2 = createUser('o', 'Jones')
+let turn = 1
 
 let gamePlay = (function () {
-    // let player1 = this.createUser('x', 'Kat')
-    // let player2 = this.createUser('o', 'Jones')
-        
-    // return {
-    //     createUser: function(sigil, name) {
-    //         return {
-    //             sigil:sigil, 
-    //             name:name}
-    //     },
     return {
-        checkSelection: function(event) {
+    checkSelection: function(event) {
+        this.determinePlayer(turn)
+        turn++
         if (event.target.innerText !== '') {return}
-        else {event.target.innerText = currentPlayer.sigil;
+        else {event.target.innerText = currentPlayer.sigil}
         let boardSelection = event.target.id
-        let currentPlayer = player1
         this.updateGameBoardArray(boardSelection)
         this.checkVictory(gameboard)
         this.switchPlayer(currentPlayer)}
-},
+,
+    determinePlayer: function(turn) {
+        if (turn % 2 == 0) {return currentPlayer = player2}
+        else {return currentPlayer = player1}
+    }
+,
     switchPlayer: function(currentPlayer) {
         currentPlayer == player1 ? player2 : player1
 },
@@ -48,7 +49,7 @@ let gamePlay = (function () {
         let checkSymbol = currentPlayer.sigil
         if (gameboard.board[0].includes(checkSymbol)) {
             if (gameboard.board[1].includes(checkSymbol) && gameboard.board[2].includes(checkSymbol))
-                {console.log('win')}
+                {this.announceWinner(currentPlayer)}
             if (gameboard.board[3].includes(checkSymbol) && gameboard.board[6].includes(checkSymbol))
                 {console.log('win2')}
             if (gameboard.board[4].includes(checkSymbol) && gameboard.board[8].includes(checkSymbol))
@@ -68,15 +69,19 @@ let gamePlay = (function () {
             if (gameboard.board[2].includes(checkSymbol) && gameboard.board[5].includes(checkSymbol))
                 {console.log('win8')}
         }
-    }
+    },
+
+    announceWinner: function(currentPlayer) {
+        let winner = currentPlayer.name
+        let header = document.querySelector('.announcement')
+        header.textContent = `${winner} wins!`
+        this.stopPlay()
+    },
+
+    stopPlay: function() {
+        const buttons = document.querySelectorAll('button')
+        buttons.forEach(button => {button.style.pointerEvents = "none"})}
 }}());
-
-
-const buttons = document.querySelectorAll('button')
-buttons.forEach(button => {button.addEventListener('click', function handleClick(event) {
-    console.log(event.target.id)
-    gamePlay.checkSelection(event)
-})})
 
 
 
